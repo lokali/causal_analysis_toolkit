@@ -13,6 +13,7 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 import seaborn as sns 
 import pydot 
+import ges 
 import os 
 import io
 
@@ -204,6 +205,15 @@ def run_pc(data, alpha, indep_test, label):
     return cg, file_path
 
 
+def run_ges(data, phases = ['forward', 'backward', 'turning']):
+    estimated_graph, score = ges.fit_bic(data, A0 = None, phases = phases, debug = 0)
+    if not os.path.exists("results/ges"):
+        os.mkdir("results/ges")
+    path_ges = f"results/ges/ges_D{data.shape[1]}_N{data.shape[0]}"
+    np.save(path_ges + '.npy', estimated_graph)
+    return estimated_graph, path_ges    
+
+
 def to_my_pydot(G, edges=None, labels=None, colors=None, title="", dpi=500):
     '''
     Convert a graph object to a DOT object, with nodes colored based on their labels.
@@ -272,6 +282,7 @@ def to_my_pydot(G, edges=None, labels=None, colors=None, title="", dpi=500):
 
     return pydot_g
 
+
 def to_pydot_color(general_graph, labels, label_to_color_dict, path):
     pyd = to_my_pydot(general_graph, labels=labels, colors=label_to_color_dict)
     tmp_png = pyd.create_png(f="png")
@@ -283,6 +294,12 @@ def to_pydot_color(general_graph, labels, label_to_color_dict, path):
     plt.imshow(img)
     plt.savefig(path+'_color.png', dpi=500)
     plt.show()
+
+
+def to_pydot_plain(general_graph, labels, path):
+    pyd = GraphUtils.to_pydot(general_graph, labels=labels)
+    pyd.write_png(path + '.png')
+
 
 def get_feature_to_color(category_to_features):  
     """
@@ -320,8 +337,20 @@ def get_feature_to_color(category_to_features):
     return feature_to_color
 
 
-def build_general_graph_from_adjacency_matrix(A, labels):
+def build_general_graph_from_adjacency_matrix_causallearn(A, labels):
     directed_edges = {(i, j) for i in range(A.shape[0]) for j in range(A.shape[0]) if A[j, i] == 1 and A[i, j] == -1}
+    undirected_edges = {(i, j) for i in range(A.shape[0]) for j in range(i + 1, A.shape[0]) if A[j, i] != 0 and A[i, j] != 0}
+
+    nodes = [GraphNode(i) for i in labels]
+
+    general_graph = GeneralGraph(nodes=nodes)
+    for i, j in directed_edges: general_graph.add_edge(Edge(nodes[i], nodes[j], Endpoint.TAIL, Endpoint.ARROW))
+    for i, j in undirected_edges: general_graph.add_edge(Edge(nodes[i], nodes[j], Endpoint.TAIL, Endpoint.TAIL))
+    return general_graph
+
+
+def build_general_graph_from_adjacency_matrix_ges(A, labels):
+    directed_edges = {(i, j) for i in range(A.shape[0]) for j in range(A.shape[0]) if A[j, i] == 0 and A[i, j] != 0}
     undirected_edges = {(i, j) for i in range(A.shape[0]) for j in range(i + 1, A.shape[0]) if A[j, i] != 0 and A[i, j] != 0}
 
     nodes = [GraphNode(i) for i in labels]

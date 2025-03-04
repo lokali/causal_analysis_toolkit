@@ -5,6 +5,7 @@ seaborn
 scipy
 jupyter
 causallearn
+ges 
 graphviz
 pydot
 networkx
