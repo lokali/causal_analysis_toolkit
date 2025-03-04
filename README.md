@@ -16,8 +16,11 @@ This repository aims to provide researchers with an easy-to-use framework for **
 ## Features
 
 ✅  **Preprocessing** : Handles dataset loading and cleaning
+
 ✅  **Visualizations** : Generates histograms and pairwise scatterplots
+
 ✅  **Statistical Independence Tests** : Computes CI p-values for multiple tests
+
 ✅  **Causal Structure Learning** : Implements the PC algorithm to infer causal graphs
 
 ---
