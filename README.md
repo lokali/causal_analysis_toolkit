@@ -9,7 +9,7 @@ The **Causal Analysis Toolkit** provides a comprehensive pipeline for:
 * **Pairwise Dependence Analysis** : Using Kernel-based Conditional Independence (KCI), Randomized Conditional Independence Test (RCIT), and HSIC tests
 * **Causal Discovery** : Using the **PC algorithm** from `causal-learn`
 
-This repository aims to provide researchers with an easy-to-use framework for **causal structure learning** from observational data.
+This repository aims to provide researchers with an easy-to-use framework for **causal discovery** from observational data.
 
 ---
 
@@ -21,7 +21,7 @@ This repository aims to provide researchers with an easy-to-use framework for **
 
 ✅  **Statistical Independence Tests** : Computes CI p-values for multiple tests
 
-✅  **Causal Structure Learning** : Implements the PC algorithm to infer causal graphs
+✅  **Causal Discovery** : Implements the PC algorithm to infer causal graphs
 
 ---
 
