@@ -1,6 +1,21 @@
 import numpy as np
 from causallearn.utils.cit import CIT
 from conditional_independence import hsic_test
+from causallearn.graph.GeneralGraph import GeneralGraph
+from causallearn.graph.GraphNode import GraphNode
+from causallearn.graph.Edge import Edge
+from causallearn.graph.Endpoint import Endpoint
+from causallearn.graph.NodeType import NodeType
+from causallearn.search.ConstraintBased.PC import pc
+from causallearn.utils.GraphUtils import GraphUtils
+import matplotlib.image as mpimg
+import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
+import seaborn as sns 
+import pydot 
+import os 
+import io
+
 """
     Input: data, test_method
     Output: matrix of unconditional independent test results.
@@ -55,9 +70,6 @@ class CITestRunner:
         return results
     
 
-import seaborn as sns
-import os 
-import matplotlib.pyplot as plt
 def plot_histograms_single(data, figsize=(12, 8)):
     sns.histplot(data, bins='auto', kde=True)
     if not os.path.exists("results/"):
@@ -66,9 +78,6 @@ def plot_histograms_single(data, figsize=(12, 8)):
     plt.show()
 
 
-import seaborn as sns
-import matplotlib.pyplot as plt
-import os 
 def plot_histograms_all(df, column_size = 4, figsize=(12, 8)):
     """
     Plots histograms for all numerical columns in a DataFrame.
@@ -109,10 +118,6 @@ def plot_histograms_all(df, column_size = 4, figsize=(12, 8)):
     plt.show()
 
 
-
-import seaborn as sns
-import matplotlib.pyplot as plt
-import os 
 def run_scatterplot(df, kci_matrix=None, hsic_matrix=None, rci_matrix=None):
     g = sns.PairGrid(df, corner=True)
     # Define a custom plotting function
@@ -163,11 +168,6 @@ def run_scatterplot(df, kci_matrix=None, hsic_matrix=None, rci_matrix=None):
     plt.show()
 
 
-
-from causallearn.search.ConstraintBased.PC import pc
-from causallearn.utils.GraphUtils import GraphUtils
-import os 
-import numpy as np 
 def run_pc(data, alpha, indep_test, label):
     """
     Runs the PC algorithm on the given data and saves the resulting graph.
@@ -204,17 +204,6 @@ def run_pc(data, alpha, indep_test, label):
     return cg, file_path
 
 
-
-
-from causallearn.graph.Edge import Edge
-from causallearn.graph.Endpoint import Endpoint
-from causallearn.graph.NodeType import NodeType
-import pydot 
-import matplotlib.image as mpimg
-import matplotlib.pyplot as plt
-import io
-import matplotlib.colors as mcolors
-import seaborn as sns 
 def to_my_pydot(G, edges=None, labels=None, colors=None, title="", dpi=500):
     '''
     Convert a graph object to a DOT object, with nodes colored based on their labels.
@@ -331,11 +320,6 @@ def get_feature_to_color(category_to_features):
     return feature_to_color
 
 
-import numpy as np
-from causallearn.graph.GeneralGraph import GeneralGraph
-from causallearn.graph.GraphNode import GraphNode
-from causallearn.graph.Edge import Edge
-from causallearn.graph.Endpoint import Endpoint
 def build_general_graph_from_adjacency_matrix(A, labels):
     directed_edges = {(i, j) for i in range(A.shape[0]) for j in range(A.shape[0]) if A[j, i] == 1 and A[i, j] == -1}
     undirected_edges = {(i, j) for i in range(A.shape[0]) for j in range(i + 1, A.shape[0]) if A[j, i] != 0 and A[i, j] != 0}
@@ -348,10 +332,6 @@ def build_general_graph_from_adjacency_matrix(A, labels):
     return general_graph
 
 
-
-import matplotlib.pyplot as plt
-import seaborn as sns 
-import os 
 def plot_heatmap(matrix):
     plt.figure(figsize=(12, 10))
     # Alternative: "Blues", "Reds", "coolwarm", "plasma"
